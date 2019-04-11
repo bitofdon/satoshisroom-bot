@@ -8,6 +8,11 @@ with open('config.json', 'r') as infile:
 
 app = Flask(__name__)
 
+#prettify json - dump & write the call into a file called response.json
+def write_json(data, filename='response.json'):
+    with open(filename, 'w') as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
 #https://pro-api.coinmarketcap.com
 def get_cmc_data(crypto):
     url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
@@ -15,7 +20,7 @@ def get_cmc_data(crypto):
     headers = {'X-CMC_PRO_API_KEY': token}
 
     r = requests.get(url, headers=headers, params=params).json()
-    print(r)
+    write_json(r)
 
 def main():
     #print the call of get_cmc_data - BTC as an argument here as example
