@@ -8,19 +8,26 @@ with open('config.json', 'r') as infile:
 
 app = Flask(__name__)
 
+#prettify json - dump & write the call into a file called response.json
+def write_json(data, filename='response.json'):
+    with open(filename, 'w') as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
 #https://pro-api.coinmarketcap.com
 def get_cmc_data(crypto):
     url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
     params = {'symbol': crypto, 'convert': 'USD'}
     headers = {'X-CMC_PRO_API_KEY': token}
 
+    #get the price of any 'crypto', we pass in our data dictionary
+    #BTC dictionary has keys: 'quote', 'USD', 'price'
     r = requests.get(url, headers=headers, params=params).json()
-    print(r)
+    price = r['data'][crypto]['quote']["USD"]['price']
+    return price
 
 def main():
     #print the call of get_cmc_data - BTC as an argument here as example
-    get_cmc_data('BTC') #to get data
+    print(get_cmc_data('BTC'))
 
 if __name__ == '__main__':
     main()
-    #app.run(debug=True)
